@@ -36,7 +36,7 @@ This project is a FastAPI application for managing job schedules with PostgreSQL
       source env.sh
       ```
 
-5 .**Run main python file to execute uvicorn**:
+5. **Run main python file to execute uvicorn**:
       ```
       python main.py
       ```

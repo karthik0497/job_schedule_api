@@ -1,7 +1,9 @@
+# main.py
 
-from fastapi import *
+from fastapi import FastAPI
 from api_route import router as job_router
-from config import *
+from config import settings
+
 
 app = FastAPI(
     title=settings.APP_NAME,

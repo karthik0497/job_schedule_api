@@ -2,7 +2,7 @@
 # Job Schedule API
 
 This project is a job scheduling API built with FastAPI and connected to a PostgreSQL database. The API and database are hosted on Render, allowing you to interact with them directly.
-## Base URL
+## Host URL
 
 The API is accessible at the following base URL:
 

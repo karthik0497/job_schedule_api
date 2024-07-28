@@ -1,5 +1,30 @@
-Copy code
-# Job Scheduler API
+
+# Job Schedule API
+
+This project is a job scheduling API built with FastAPI and connected to a PostgreSQL database. The API and database are hosted on Render, allowing you to interact with them directly.
+## Base URL
+
+The API is accessible at the following base URL:
+
+```
+https://job-schedule-api.onrender.com
+```
+
+## API Documentation
+
+For detailed API documentation, visit the FastAPI docs at:
+use:
+```
+API_KEY="123456"
+```
+```
+https://job-schedule-api.onrender.com/docs
+```
+
+
+
+###
+
 
 This project is a FastAPI application for managing job schedules with PostgreSQL as the backend database.
 
@@ -23,7 +48,6 @@ This project is a FastAPI application for managing job schedules with PostgreSQL
 4. **Set up environment variables**:
     - Create a file named `env.sh` in the root directory of your project:
       ```
-
       export API_KEY="123456"
       export DATABASE_URL="postgresql://username:password@hostname:port/database?sslmode=verify-full"
       export API_KEY_NAME="access_token"

@@ -2,10 +2,11 @@
 
 from typing import List
 from model import *
-from db_conn import *
-import psycopg2
+from db_conn import get_db_connection
 from fastapi import HTTPException, Depends
 import json
+import psycopg2
+
 
 class JobRepository:
     def __init__(self, conn: psycopg2.extensions.connection = Depends(get_db_connection)):
@@ -15,15 +16,20 @@ class JobRepository:
         with self.conn.cursor() as cursor:
             cursor.execute("SELECT job_id, job_name, job_schedule, job_description, job_type, job_params FROM jobs")
             jobs = cursor.fetchall()
-            return [Job(**dict(zip(["job_id", "job_name", "job_schedule", "job_description", "job_type", "job_params"], job))) for job in jobs]
+            return [Job(**dict(
+                zip(["job_id", "job_name", "job_schedule", "job_description", "job_type", "job_params"], job))) for job
+                    in jobs]
 
     def get_job(self, job_id: int) -> Job:
         with self.conn.cursor() as cursor:
-            cursor.execute("SELECT job_id, job_name, job_schedule, job_description, job_type, job_params FROM jobs WHERE job_id = %s", (job_id,))
+            cursor.execute(
+                "SELECT job_id, job_name, job_schedule, job_description, job_type, job_params FROM jobs WHERE job_id = %s",
+                (job_id,))
             job = cursor.fetchone()
             if job is None:
                 raise HTTPException(status_code=404, detail="Job not found")
-            return Job(**dict(zip(["job_id", "job_name", "job_schedule", "job_description", "job_type", "job_params"], job)))
+            return Job(
+                **dict(zip(["job_id", "job_name", "job_schedule", "job_description", "job_type", "job_params"], job)))
 
     def create_job(self, job: JobCreate) -> Job:
         job_id = generate_sequential_id()
@@ -52,7 +58,7 @@ class JobRepository:
             cursor.execute("DELETE FROM jobs")
             self.conn.commit()
         return {"message": "All jobs have been deleted successfully"}
-    
+
     def delete_job(self, job_id: int) -> dict:
         with self.conn.cursor() as cursor:
             cursor.execute("SELECT COUNT(*) FROM jobs WHERE job_id = %s", (job_id,))

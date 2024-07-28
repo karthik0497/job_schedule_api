@@ -2,25 +2,29 @@ import psycopg2
 from psycopg2 import sql, OperationalError
 from urllib.parse import urlparse
 
-# Define the new database name
+# Define the new database name and table name
 db_name = "new_database"
 table_name = "jobs"
 # Define your connection strings
-conn_str = "postgresql://karthik:xFF8r7TXERXjTPPhsSdmtw@scheduler-cluster1-5485.7s5.aws-ap-south-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full"
-DATABASE_URL = f"postgresql://karthik:xFF8r7TXERXjTPPhsSdmtw@scheduler-cluster1-5485.7s5.aws-ap-south-1.cockroachlabs.cloud:26257/{db_name}?sslmode=verify-full"
+DATABASE_URL = "postgresql://karthik:VojIUmRXZArEPv6eevaLkDMP4VuypWOT@dpg-cqgd43dds78s73ccrk20-a.singapore-postgres.render.com/job_schedule_db"
+parsed_url = urlparse(DATABASE_URL)
 
 def create_db():
     conn = None
     try:
-        # Connect to the PostgreSQL server
-        conn = psycopg2.connect(conn_str)
+        # Connect to the PostgreSQL server using the postgres database
+        conn = psycopg2.connect(
+            dbname='postgres',
+            user=parsed_url.username,
+            password=parsed_url.password,
+            host=parsed_url.hostname,
+            port=parsed_url.port
+        )
         conn.autocommit = True  # Needed for CREATE DATABASE command
 
         with conn.cursor() as cursor:
             # Check if the database already exists
-            cursor.execute("""
-                SELECT 1 FROM pg_database WHERE datname = %s
-            """, (db_name,))
+            cursor.execute("SELECT 1 FROM pg_database WHERE datname = %s", (db_name,))
             exists = cursor.fetchone()
 
             if not exists:
